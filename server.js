@@ -9,7 +9,7 @@ const Appointment = db.appointment;
 const app = express();
 
 let corsOptions = {
-  origin: "https://sistemadecitas.netlify.app",
+  origin: ["https://sistemadecitas.netlify.app", "http://localhost:3000"]
 };
 
 app.use(cors(corsOptions));
