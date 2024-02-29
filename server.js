@@ -41,8 +41,5 @@ app.listen(PORT, () => {
 
 db.sequelize.sync().then(() => {
   console.log("Drop and Resync Db");
-  Role.create({
-    id: 1,
-    name: 'User'
-  })
+
 });
