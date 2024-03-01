@@ -9,7 +9,7 @@ const Appointment = db.appointment;
 const app = express();
 
 let corsOptions = {
-  origin: ["https://medbook-vistacentro.netlify.app", "http://localhost:3000"]
+  origin: ["https://medbook-vistacentro.netlify.app", "http://localhost:3000", "http://10.0.0.121:3000"]
 };
 
 app.use(cors(corsOptions));
