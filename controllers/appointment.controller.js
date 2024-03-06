@@ -1,4 +1,6 @@
 const appointmentService = require("../services/appointment.service");
+const db = require("../models");
+const Appointment = db.appointment;
 
 exports.createAppointment = async (req, res) => {
     try {
@@ -72,5 +74,14 @@ exports.getUserAppointments = async (req, res) => {
         res.status(200).json(appointments)
     } catch (error) {
         res.status(400).json({message: error.message});
+    }
+}
+
+exports.getAllAppointments = async (req, res) => {
+    try{
+        const appointmentList = await Appointment.findAll();
+        res.status(200).json(appointmentList);
+    }catch (e){
+        res.status(400).json({message: e.message})
     }
 }

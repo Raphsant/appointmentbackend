@@ -1,4 +1,6 @@
 const db = require("../models");
+const res = require("express/lib/response");
+const e = require("express");
 const user = db.user;
 
 exports.allAccess = (req, res) => {
@@ -32,6 +34,19 @@ exports.updateUser = async (req, res) => {
         }
         await targetUser.update(req.body)
         res.status(200).send("Usuario modificado existosamente");
+    } catch (e) {
+        res.status(500).send({message: e.message})
+    }
+}
+
+exports.getAllUsers = async (req, res) => {
+    try {
+        const userList = await user.findAll({
+            attributes:
+                {exclude: ['password']}
+
+        });
+        res.status(200).json(userList);
     } catch (e) {
         res.status(500).send({message: e.message})
     }
