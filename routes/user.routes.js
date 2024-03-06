@@ -11,11 +11,10 @@ module.exports = function (app) {
     });
 
     app.get("/api/test/all", authJwt.verifyToken, controller.allAccess);
-
+    app.get("/api/user/getAll", authJwt.verifyToken, controller.getAllUsers);
     // app.get("/api/test/user", authJwt.verifyToken, controller.userBoard);
     app.get("/api/user/profile", authJwt.verifyToken, controller.userBoard);
     app.post("/api/user/update", authJwt.verifyToken, controller.updateUser);
-    app.post("/api/user/getAll", authJwt.verifyToken, controller.getAllUsers);
 
 
     // app.get(
