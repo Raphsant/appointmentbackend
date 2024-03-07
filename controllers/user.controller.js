@@ -65,3 +65,13 @@ exports.moderatorBoard = (req, res) => {
     res.status(200).send("Moderator Content.");
 };
 
+exports.deleteUser = async (req, res) => {
+    try {
+        const targetUser = await user.findByPk(req.body.id)
+        await targetUser.destroy();
+        res.status(200).send({message: "user deleted successfully"})
+    } catch (e) {
+        res.status(400).json({message: e.message})
+
+    }
+}
