@@ -85,7 +85,7 @@ exports.getAllAppointments = async (req, res) => {
             include: [{
                 model: User,
                 required: true,
-                through: {attributes: {exclude: ['password']}}
+                through: {attributes: [['firstName', 'lastName']]}
             },
             //     {
             //     model: Doctor,
