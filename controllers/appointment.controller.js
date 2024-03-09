@@ -1,6 +1,8 @@
 const appointmentService = require("../services/appointment.service");
 const db = require("../models");
+const {Sequelize} = require("sequelize");
 const Appointment = db.appointment;
+const User = db.user;
 
 exports.createAppointment = async (req, res) => {
     try {
@@ -79,7 +81,12 @@ exports.getUserAppointments = async (req, res) => {
 
 exports.getAllAppointments = async (req, res) => {
     try{
-        const appointmentList = await Appointment.findAll({include: [{model: db.user}, {model: db.doctor}]});
+        const appointmentList = await Appointment.findAll({
+            include: [{
+                model: User, // Assuming 'User' is your user model
+                where: { id: Sequelize.col('Appointment.userId') } // Correct syntax for specifying the condition
+            }]
+        });
         res.status(200).json(appointmentList);
     }catch (e){
         res.status(400).json({message: e.message})
