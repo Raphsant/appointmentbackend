@@ -2,6 +2,7 @@ const appointmentService = require("../services/appointment.service");
 const db = require("../models");
 const Appointment = db.appointment;
 const User = db.user
+const Doctor = db.doctor
 
 exports.createAppointment = async (req, res) => {
     try {
@@ -79,13 +80,21 @@ exports.getUserAppointments = async (req, res) => {
 }
 
 exports.getAllAppointments = async (req, res) => {
-    try{
+    try {
         const appointmentList = await Appointment.findAll({
-            include: [{model: User, required: true}]
+            include: [{
+                model: User,
+                required: true,
+                through: {attributes: ['firstName', 'lastName', 'id']}
+            }, {
+                model: Doctor,
+                required: true,
+                through: {attributes: ['firstName', 'lastName', 'id', 'specialty']}
+            }]
 
         });
         res.status(200).json(appointmentList);
-    }catch (e){
+    } catch (e) {
         res.status(400).json({message: e.message})
     }
 }

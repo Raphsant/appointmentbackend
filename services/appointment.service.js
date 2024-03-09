@@ -12,11 +12,6 @@ async function createAppointment(doctorId, dateTime, userId) {
     if (!doctor) throw new Error("doctor not found");
 
     const existingAppointment = await Appointment.findOne({
-        // include: {
-        //   model: Doctor,
-        //   where: { id: doctorId },
-        //   through: { attributes: [] },
-        // },
         where: {
             dateTime: {
                 [Op.eq]: dateTime,
@@ -39,6 +34,7 @@ async function createAppointment(doctorId, dateTime, userId) {
         userId
     });
     await patient.addAppointment(newAppointment);
+    await doctor.addAppointment(newAppointment);
 
 
     return newAppointment;
