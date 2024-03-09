@@ -81,10 +81,8 @@ exports.getUserAppointments = async (req, res) => {
 exports.getAllAppointments = async (req, res) => {
     try{
         const appointmentList = await Appointment.findAll({
-            include: [{
-                model: User, // Assuming 'User' is your user model
-                where: { id: Appointment.userId} // Correct syntax for specifying the condition
-            }]
+            include: [{model: User, required: true}]
+
         });
         res.status(200).json(appointmentList);
     }catch (e){
