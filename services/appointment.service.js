@@ -38,6 +38,7 @@ async function createAppointment(doctorId, dateTime, userId) {
         doctorId,
         userId
     });
+    await patient.addAppointment(newAppointment);
 
 
     return newAppointment;
