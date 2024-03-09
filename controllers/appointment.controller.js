@@ -79,7 +79,7 @@ exports.getUserAppointments = async (req, res) => {
 
 exports.getAllAppointments = async (req, res) => {
     try{
-        const appointmentList = await Appointment.findAll({include: [{model: db.user, required: true}, {model: db.doctor, required: true}]});
+        const appointmentList = await Appointment.findAll({include: [{model: db.user, where: db.user.id = Appointment.userId}, {model: db.doctor, where: db.doctor.id = Appointment.doctorId}]});
         res.status(200).json(appointmentList);
     }catch (e){
         res.status(400).json({message: e.message})
