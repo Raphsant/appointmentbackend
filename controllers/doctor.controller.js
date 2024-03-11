@@ -12,6 +12,7 @@ exports.createDoctor = async (req, res) => {
       lastName: req.body.lastName,
       specialty: req.body.specialty,
       schedule: req.body.schedule,
+      phone: req.body.phone
     });
     await res.status(200).send("success");
   } catch (e) {
@@ -27,6 +28,7 @@ exports.editDoctor = async (req, res) => {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       specialty: req.body.specialty,
+      phone: req.body.phone
     });
     await targetDoctor.save();
   } catch (e) {

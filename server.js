@@ -39,9 +39,29 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
 
-db.sequelize.sync().then(() => {
+db.sequelize.sync({force: true}).then(() => {
   console.log("Drop and Resync Db");
 
 });
 
 
+
+
+// const accountSid = "AC1947373f2ca9f65ba9639ba8a8225374"
+// const authToken ="bc52e384a5d445a532bcb062a0db2c82";
+// const client = require('twilio')(accountSid, authToken);
+// const one = "Miercoles";
+// const two = "12:00pm";
+//
+// client.messages
+//     .create({
+//       messagingServiceSid: 'MGf95103e4cda1035962adcfc275e47d7d',
+//       contentSid: 'HX444e87f5b0fa719e7a4ac9bf9af8f0d3',
+//       from: 'whatsapp:+18777310396',
+//       contentVariables: JSON.stringify({
+//         1: 'Miercoles',
+//         2: '12:00pm'
+//       }),
+//       to: 'whatsapp:+584142462027'
+//     })
+//     .then(message => console.log(message.sid));

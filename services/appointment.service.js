@@ -31,7 +31,8 @@ async function createAppointment(doctorId, dateTime, userId) {
     const newAppointment = await Appointment.create({
         dateTime,
         doctorId,
-        userId
+        userId,
+        isConfirmed: false,
     });
     await patient.addAppointment(newAppointment);
     await doctor.addAppointment(newAppointment);
@@ -115,11 +116,20 @@ async function getAllUserAppointments(userId){
     }
 }
 
+async function changeAptStatus(status, id){
+    const targetApt = await Appointment.findByPk(id)
+    await targetApt.update({
+        isConfirmed: status,
+    })
+
+}
+
 module.exports = {
     createAppointment,
     getAppointment,
     updateAppointment,
     deleteAppointment,
     getAllDoctorsAppointments,
-    getAllUserAppointments
+    getAllUserAppointments,
+    changeAptStatus,
 };

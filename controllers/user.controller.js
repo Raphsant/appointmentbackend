@@ -16,7 +16,8 @@ exports.userBoard = async (req, res) => {
             firstName: targetUser.firstName,
             lastName: targetUser.lastName,
             username: targetUser.username,
-            id: targetUser.id
+            id: targetUser.id,
+            phone: targetUser.phone
 
         });
     } catch (e) {

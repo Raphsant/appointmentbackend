@@ -10,10 +10,12 @@ exports.createAppointment = async (req, res) => {
         const doctorId = req.body.doctorId;
         const dateTime = new Date(req.body.dateTime);
         const userId = req.body.userId;
+        const isConfirmed = false
         const newAppointment = await appointmentService.createAppointment(
             doctorId,
             dateTime,
-            userId
+            userId,
+            isConfirmed
         );
         res.status(201).json(newAppointment);
     } catch (e) {
@@ -107,6 +109,15 @@ exports.appointmentCount = async (req,res) => {
     try{
         const count = await Appointment.count()
         res.status(200).json(count)
+    }catch (e) {
+        res.status(400).json({message: e.message})
+    }
+}
+
+exports.changeAptStatus = async (req,res) => {
+    try{
+        const confirmation = await appointmentService.changeAptStatus(req.body.status, req.body.id)
+        res.status(200).json(confirmation)
     }catch (e) {
         res.status(400).json({message: e.message})
     }

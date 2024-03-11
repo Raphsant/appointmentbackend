@@ -1,25 +1,33 @@
-const { DataTypes } = require("sequelize");
+const {DataTypes} = require("sequelize");
 const specs = require("../data/specialties");
 module.exports = (sequelize, Sequelize) => {
-  const Doctor = sequelize.define("doctors", {
-    id: {
-      type: Sequelize.INTEGER,
-      primaryKey: true,
-    },
-    firstName: {
-      type: Sequelize.STRING,
-    },
-    lastName: {
-      type: Sequelize.STRING,
-    },
-    specialty: {
-      type: DataTypes.ENUM("Medicina Interna", "test2"),
-    },
-    schedule: {
-      type: Sequelize.JSONB,
-      allowNull: true,
-    },
-  });
+    const Doctor = sequelize.define("doctors", {
+        id: {
+            type: Sequelize.INTEGER,
+            primaryKey: true,
+        },
+        firstName: {
+            type: Sequelize.STRING,
+            allowNull: false,
 
-  return Doctor;
+        },
+        lastName: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
+        specialty: {
+            type: DataTypes.ENUM("Medicina Interna", "Ginecologia", "Traumatologia", "Otorrinolaringologia", "Neurologia", "Reumatologia", "Urologia", "Cardiologia"),
+            allowNull: false,
+        },
+        phone: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
+        schedule: {
+            type: Sequelize.JSONB,
+            allowNull: false,
+        },
+    });
+
+    return Doctor;
 };
