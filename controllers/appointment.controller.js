@@ -102,3 +102,12 @@ exports.getAllAppointments = async (req, res) => {
         res.status(400).json({message: e.message})
     }
 }
+
+exports.appointmentCount = async (req,res) => {
+    try{
+        const count = await Appointment.count()
+        res.status(200).json(count)
+    }catch (e) {
+        res.status(400).json({message: e.message})
+    }
+}

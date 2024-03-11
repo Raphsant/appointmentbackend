@@ -66,3 +66,12 @@ exports.getDoctor = async (req, res) => {
     res.status(400).send(e.message);
   }
 };
+
+exports.doctorCount = async (req,res) => {
+  try{
+    const count = await Doctor.count()
+    res.status(200).json(count)
+  }catch (e) {
+    res.status(400).json({message: e.message})
+  }
+}

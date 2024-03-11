@@ -75,3 +75,11 @@ exports.deleteUser = async (req, res) => {
 
     }
 }
+exports.userCount = async (req,res) => {
+    try{
+        const count = await user.count()
+        res.status(200).json(count)
+    }catch (e) {
+        res.status(400).json({message: e.message})
+    }
+}
