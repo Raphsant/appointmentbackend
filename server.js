@@ -9,7 +9,7 @@ const Appointment = db.appointment;
 const app = express();
 
 let corsOptions = {
-  origin: ["https://medbook-vistacentro.netlify.app", "http://localhost:3000", "http://10.0.0.121:3000"]
+    origin: ["https://medbook-vistacentro.netlify.app", "http://localhost:3000", "http://10.0.0.121:3000"]
 };
 
 app.use(cors(corsOptions));
@@ -18,11 +18,11 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "hello world" });
+    res.json({message: "hello world"});
 });
 
 require("./routes/auth.routes")(app);
@@ -36,15 +36,25 @@ require("./routes/appointment.routes")(app);
 // set port, listen for requests
 const PORT = process.env.PORT || 5432;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
+    console.log(`Server is running on port ${PORT}.`);
 });
 
 db.sequelize.sync().then(() => {
-  console.log("Drop and Resync Db");
+    console.log("Drop and Resync Db");
+    Role.create({
+        id: 1,
+        name: 'User'
+    })
+    Role.create({
+        id: 2,
+        name: 'Admin'
+    })
+    Role.create({
+        id: 3,
+        name: 'Moderator'
+    })
 
 });
-
-
 
 
 // const accountSid = "AC1947373f2ca9f65ba9639ba8a8225374"
