@@ -26,6 +26,7 @@ module.exports = function (app) {
     app.get("/api/apts/getUserApts", authJwt.verifyToken, controller.getUserAppointments);
     app.get("/api/apts/getAllApts", authJwt.verifyToken, controller.getAllAppointments);
     app.get("/api/apts/count", authJwt.verifyToken, controller.appointmentCount);
+    app.post("/api/apts/confirm", authJwt.verifyToken, controller.changeAptStatus)
 };
 
 
