@@ -116,6 +116,8 @@ exports.appointmentCount = async (req,res) => {
 
 exports.changeAptStatus = async (req,res) => {
     try{
+        console.log(req.body.status)
+        console.log(req.body.id)
         const confirmation = await appointmentService.changeAptStatus(req.body.status, req.body.id)
         res.status(200).json(confirmation)
     }catch (e) {
