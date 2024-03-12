@@ -16,7 +16,7 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false,
         },
         specialty: {
-            type: DataTypes.ENUM("Medicina Interna", "Ginecologia", "Traumatologia", "Otorrinolaringologia", "Neurologia", "Reumatologia", "Urologia", "Cardiologia"),
+            type: Sequelize.STRING,
             allowNull: false,
         },
         phone: {
