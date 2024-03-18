@@ -53,7 +53,8 @@ exports.createAppointment = async (req, res) => {
             isConfirmed
         );
         res.status(201).json(newAppointment);
-        sendAppointmentCreatedMessage(dateTime, "+18152950339")
+        const targetUser = await User.findByPk(userId)
+        sendAppointmentCreatedMessage(dateTime, targetUser.phone)
 
     } catch (e) {
         res.status(400).json({message: e.message});
