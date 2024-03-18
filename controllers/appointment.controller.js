@@ -14,7 +14,7 @@ function sendAppointmentCreatedMessage(dateAndTime, phone){
             from: 'whatsapp:+18777310396',
             contentVariables: JSON.stringify({
                 1: dateAndTime,
-                2: ''
+                2: '12pm'
             }),
             to:  `whatsapp:${phone}`
         })
