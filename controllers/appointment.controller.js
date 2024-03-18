@@ -38,7 +38,7 @@ function sendAppointmentCreatedMessage(dateAndTime, phone) {
                     2: time,
                 }),
                 to: `whatsapp:${phone}`
-            }).catch(e => console.log(e.message))
+            }).catch(e => console.log(e.message)).catch(e => console.log(e.message))
             .then(message => console.log(message.sid))
     } catch (e) {
         console.error(e.message)
