@@ -24,7 +24,7 @@ function formatDateAndTimeForMsg(dateTimeString) {
     return [formattedDate, formattedTime];
 }
 function sendAppointmentCreatedMessage(dateAndTime, phone){
-    const [date,time] = formatDateAndTimeForMsg()
+    const [date,time] = formatDateAndTimeForMsg(dateAndTime)
     client.messages
         .create({
             messagingServiceSid: 'MGf95103e4cda1035962adcfc275e47d7d',
