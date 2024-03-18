@@ -6,13 +6,12 @@ const Doctor = db.doctor
 const accountSid = process.env.ACCOUNTSID
 const authToken = process.env.AUTHTOKEN
 const client = require('twilio')(accountSid, authToken);
-
 function formatDateAndTimeForMsg(dateTimeString) {
     const date = new Date(dateTimeString);
 
     // Options for formatting the date in Spanish
-    const dateOptions = {weekday: 'long', day: 'numeric', month: 'long'};
-    const timeOptions = {hour: 'numeric', minute: 'numeric', hour12: true};
+    const dateOptions = { weekday: 'long', day: 'numeric', month: 'long' };
+    const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
 
     // Formatters
     const dateFormatter = new Intl.DateTimeFormat('es-ES', dateOptions);
@@ -24,10 +23,9 @@ function formatDateAndTimeForMsg(dateTimeString) {
 
     return [formattedDate, formattedTime];
 }
-
-function sendAppointmentCreatedMessage(dateAndTime, phone) {
-    try {
-        const [date, time] = formatDateAndTimeForMsg(dateAndTime)
+function sendAppointmentCreatedMessage(dateAndTime, phone){
+    try{
+        const [date,time] = formatDateAndTimeForMsg(dateAndTime)
         client.messages
             .create({
                 messagingServiceSid: 'MGf95103e4cda1035962adcfc275e47d7d',
@@ -37,10 +35,10 @@ function sendAppointmentCreatedMessage(dateAndTime, phone) {
                     1: date,
                     2: time,
                 }),
-                to: `whatsapp:${phone}`
-            }).catch(e => console.log(e.message)).catch(e => console.log(e.message))
-            .then(message => console.log(message.sid))
-    } catch (e) {
+                to:  `whatsapp:${phone}`
+            })
+            .then(message => console.log(message?.sid));
+    }catch (e){
         console.error(e.message)
     }
 }
@@ -149,22 +147,22 @@ exports.getAllAppointments = async (req, res) => {
     }
 }
 
-exports.appointmentCount = async (req, res) => {
-    try {
+exports.appointmentCount = async (req,res) => {
+    try{
         const count = await Appointment.count()
         res.status(200).json(count)
-    } catch (e) {
+    }catch (e) {
         res.status(400).json({message: e.message})
     }
 }
 
-exports.changeAptStatus = async (req, res) => {
-    try {
+exports.changeAptStatus = async (req,res) => {
+    try{
         console.log(req.body.status)
         console.log(req.body.id)
         const confirmation = await appointmentService.changeAptStatus(req.body.status, req.body.id)
         res.status(200).json(confirmation)
-    } catch (e) {
+    }catch (e) {
         res.status(400).json({message: e.message})
     }
 }
