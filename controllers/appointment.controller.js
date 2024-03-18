@@ -1,6 +1,5 @@
 const appointmentService = require("../services/appointment.service");
 const db = require("../models");
-const sendAppointmentCreatedMessage = require("../whatsapp/aptmade");
 const Appointment = db.appointment;
 const User = db.user
 const Doctor = db.doctor
