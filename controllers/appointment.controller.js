@@ -24,19 +24,23 @@ function formatDateAndTimeForMsg(dateTimeString) {
     return [formattedDate, formattedTime];
 }
 function sendAppointmentCreatedMessage(dateAndTime, phone){
-    const [date,time] = formatDateAndTimeForMsg(dateAndTime)
-    client.messages
-        .create({
-            messagingServiceSid: 'MGf95103e4cda1035962adcfc275e47d7d',
-            contentSid: 'HX444e87f5b0fa719e7a4ac9bf9af8f0d3',
-            from: 'whatsapp:+18777310396',
-            contentVariables: JSON.stringify({
-                1: date,
-                2: time,
-            }),
-            to:  `whatsapp:${phone}`
-        })
-        .then(message => console.log(message.sid));
+    try{
+        const [date,time] = formatDateAndTimeForMsg(dateAndTime)
+        client.messages
+            .create({
+                messagingServiceSid: 'MGf95103e4cda1035962adcfc275e47d7d',
+                contentSid: 'HX444e87f5b0fa719e7a4ac9bf9af8f0d3',
+                from: 'whatsapp:+18777310396',
+                contentVariables: JSON.stringify({
+                    1: date,
+                    2: time,
+                }),
+                to:  `whatsapp:${phone}`
+            })
+            .then(message => console.log(message.sid));
+    }catch (e){
+        console.error(e.message)
+    }
 }
 
 exports.createAppointment = async (req, res) => {
