@@ -7,38 +7,42 @@ const Appointment = db.appointment;
 // const Doctor = require("../models/doctor.model");
 
 async function createAppointment(doctorId, dateTime, userId) {
-    const doctor = await Doctor.findByPk(doctorId);
-    const patient = await User.findByPk(userId);
-    if (!doctor) throw new Error("doctor not found");
+    try {
+        const doctor = await Doctor.findByPk(doctorId);
+        const patient = await User.findByPk(userId);
+        if (!doctor) throw new Error("doctor not found");
 
-    const existingAppointment = await Appointment.findOne({
-        where: {
-            dateTime: {
-                [Op.eq]: dateTime,
+        const existingAppointment = await Appointment.findOne({
+            where: {
+                dateTime: {
+                    [Op.eq]: dateTime,
+                },
+                doctorId: {
+                    [Op.eq]: doctorId
+                }
             },
-            doctorId: {
-                [Op.eq]: doctorId
-            }
-        },
-    });
+        });
 
-    console.log(existingAppointment)
+        console.log(existingAppointment)
 
-    if (existingAppointment) {
-        throw new Error("Doctor already has an appointment at this time");
+        if (existingAppointment) {
+            throw new Error("Doctor already has an appointment at this time");
+        }
+
+        const newAppointment = await Appointment.create({
+            dateTime,
+            doctorId,
+            userId,
+            isConfirmed: false,
+        });
+        await patient.addAppointment(newAppointment);
+        await doctor.addAppointment(newAppointment);
+
+
+        return newAppointment;
+    } catch (e) {
+        console.error(e.status)
     }
-
-    const newAppointment = await Appointment.create({
-        dateTime,
-        doctorId,
-        userId,
-        isConfirmed: false,
-    });
-    await patient.addAppointment(newAppointment);
-    await doctor.addAppointment(newAppointment);
-
-
-    return newAppointment;
 }
 
 async function getAppointment(appointmentId) {
@@ -101,7 +105,7 @@ async function getAllDoctorsAppointments(doctorId) {
     }
 }
 
-async function getAllUserAppointments(userId){
+async function getAllUserAppointments(userId) {
     const appointments = await Appointment.findAll({
         where: {
             userId: {
@@ -116,7 +120,7 @@ async function getAllUserAppointments(userId){
     }
 }
 
-async function changeAptStatus(status, id){
+async function changeAptStatus(status, id) {
     const targetApt = await Appointment.findByPk(id)
     await targetApt.update({
         isConfirmed: status,
