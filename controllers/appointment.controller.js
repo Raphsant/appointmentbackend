@@ -1,67 +1,98 @@
 const appointmentService = require("../services/appointment.service");
+const {authJwt} = require("../middleware");
 const db = require("../models");
 const Appointment = db.appointment;
 const User = db.user
 const Doctor = db.doctor
-const accountSid = process.env.ACCOUNTSID
-const authToken = process.env.AUTHTOKEN
-const client = require('twilio')(accountSid, authToken);
-function formatDateAndTimeForMsg(dateTimeString) {
-    const date = new Date(dateTimeString);
+// const accountSid = process.env.ACCOUNTSID
+// const authToken = process.env.AUTHTOKEN
+// const client = require('twilio')(accountSid, authToken);
+// function formatDateAndTimeForMsg(dateTimeString) {
+//     const date = new Date(dateTimeString);
+//
+//     // Options for formatting the date in Spanish
+//     const dateOptions = { weekday: 'long', day: 'numeric', month: 'long' };
+//     const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
+//
+//     // Formatters
+//     const dateFormatter = new Intl.DateTimeFormat('es-ES', dateOptions);
+//     const timeFormatter = new Intl.DateTimeFormat('es-ES', timeOptions);
+//
+//     // Formatting the date and time
+//     const formattedDate = dateFormatter.format(date);
+//     const formattedTime = timeFormatter.format(date);
+//
+//     return [formattedDate, formattedTime];
+//}
+// function sendAppointmentCreatedMessage(dateAndTime, phone){
+//     try{
+//         // const [date,time] = formatDateAndTimeForMsg(dateAndTime)
+//         client.messages
+//             .create({
+//                 messagingServiceSid: 'MGf95103e4cda1035962adcfc275e47d7d',
+//                 contentSid: 'HX444e87f5b0fa719e7a4ac9bf9af8f0d3',
+//                 from: 'whatsapp:+18777310396',
+//                 contentVariables: JSON.stringify({
+//                     1: date,
+//                     2: time,
+//                 }),
+//                 to:  `whatsapp:${phone}`
+//             })
+//             .then(message => console.log(message?.sid));
+//     }catch (e){
+//         console.error(e.message)
+//     }
+// }
 
-    // Options for formatting the date in Spanish
-    const dateOptions = { weekday: 'long', day: 'numeric', month: 'long' };
-    const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
-
-    // Formatters
-    const dateFormatter = new Intl.DateTimeFormat('es-ES', dateOptions);
-    const timeFormatter = new Intl.DateTimeFormat('es-ES', timeOptions);
-
-    // Formatting the date and time
-    const formattedDate = dateFormatter.format(date);
-    const formattedTime = timeFormatter.format(date);
-
-    return [formattedDate, formattedTime];
+async function isUserAdmin(req, roles) {
+    const triggerUser = await User.findByPk(req.userId)
+    const triggerUserRoles = await triggerUser.getRoles();
+    return triggerUserRoles.some(role => roles.includes(role.name))
 }
-function sendAppointmentCreatedMessage(dateAndTime, phone){
-    try{
-        const [date,time] = formatDateAndTimeForMsg(dateAndTime)
-        client.messages
-            .create({
-                messagingServiceSid: 'MGf95103e4cda1035962adcfc275e47d7d',
-                contentSid: 'HX444e87f5b0fa719e7a4ac9bf9af8f0d3',
-                from: 'whatsapp:+18777310396',
-                contentVariables: JSON.stringify({
-                    1: date,
-                    2: time,
-                }),
-                to:  `whatsapp:${phone}`
-            })
-            .then(message => console.log(message?.sid));
-    }catch (e){
-        console.error(e.message)
+
+
+/**
+ * Middleware to handle errors
+ * @param {*} error
+ * @param {*} response
+ */
+function handleError(error, response) {
+    console.error(error.message);
+    const status = error.statusCode || 500;
+    const message = error.message || 'Internal Server Error';
+    response.status(status).json({message});
+}
+
+/**
+ * Checks if the user is allowed to make the requested changes
+ * @param {*} request
+ */
+async function checkPrivileges(request) {
+    const {userId, body} = request;
+    if (userId !== body.userId && await isUserAdmin(request, ['admin, moderator']) === false) {
+        throw new Error('You are making an appointment for someone else and you are not an admin.');
     }
 }
 
-exports.createAppointment = async (req, res) => {
+exports.createAppointment = async (request, response) => {
     try {
-        console.log(req.body)
-        const doctorId = req.body.doctorId;
-        const dateTime = new Date(req.body.dateTime);
-        const userId = req.body.userId;
+        await checkPrivileges(request);
+
+        // Destructuring request body
+        const {doctorId, userId, dateTime: dateTimeString} = request.body;
+        const dateTime = new Date(dateTimeString);
         const isConfirmed = false
+
         const newAppointment = await appointmentService.createAppointment(
             doctorId,
             dateTime,
             userId,
             isConfirmed
         );
-        res.status(201).json(newAppointment);
-        const targetUser = await User.findByPk(userId)
-        sendAppointmentCreatedMessage(dateTime, targetUser.phone)
 
+        response.status(201).json(newAppointment);
     } catch (e) {
-        res.status(400).json({message: e.message});
+        handleError(e, response);
     }
 };
 exports.getAppointment = async (req, res) => {
@@ -103,7 +134,6 @@ exports.deleteAppointment = async (req, res) => {
 
 exports.getDoctorAppointments = async (req, res) => {
     try {
-
         const doctorId = req.query.doctorId;
         console.log(doctorId)
         const appointments = await appointmentService.getAllDoctorsAppointments(doctorId);
@@ -147,22 +177,22 @@ exports.getAllAppointments = async (req, res) => {
     }
 }
 
-exports.appointmentCount = async (req,res) => {
-    try{
+exports.appointmentCount = async (req, res) => {
+    try {
         const count = await Appointment.count()
         res.status(200).json(count)
-    }catch (e) {
+    } catch (e) {
         res.status(400).json({message: e.message})
     }
 }
 
-exports.changeAptStatus = async (req,res) => {
-    try{
-        console.log(req.body.status)
-        console.log(req.body.id)
-        const confirmation = await appointmentService.changeAptStatus(req.body.status, req.body.id)
-        res.status(200).json(confirmation)
-    }catch (e) {
-        res.status(400).json({message: e.message})
+exports.changeAptStatus = async (req, res) => {
+    const {status, id} = req.body;
+    try {
+        const confirmation = await appointmentService.changeAptStatus(status, id);
+        res.status(200).json(confirmation);
+    } catch (e) {
+        res.status(400).json({message: e.message});
     }
 }
+

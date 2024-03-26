@@ -1,47 +1,49 @@
-const {Op} = require("sequelize");
+const {Op, transaction} = require("sequelize");
 const db = require("../models");
 const Doctor = db.doctor;
 const User = db.user;
 const Appointment = db.appointment;
-
-// const Doctor = require("../models/doctor.model");
-
 async function createAppointment(doctorId, dateTime, userId) {
     try {
-        const doctor = await Doctor.findByPk(doctorId);
-        const patient = await User.findByPk(userId);
-        if (!doctor) throw new Error("doctor not found");
+        return await db.sequelize.transaction(async() => {
+            const doctor = await Doctor.findByPk(doctorId);
+            const patient = await User.findByPk(userId);
+            if (!doctor) throw new Error("doctor not found");
+            const thirtyMinutes = 29 * 60 * 1000; // 30 minutes in milliseconds
+            const startTime = new Date(new Date(dateTime).getTime() - thirtyMinutes);
+            const endTime = new Date(new Date(dateTime).getTime() + thirtyMinutes);
 
-        const existingAppointment = await Appointment.findOne({
-            where: {
-                dateTime: {
-                    [Op.eq]: dateTime,
+            const existingAppointment = await Appointment.findOne({
+                where: {
+                    dateTime: {
+                        [Op.between]: [startTime, endTime],
+                    },
+                    doctorId: {
+                        [Op.eq]: doctorId
+                    }
                 },
-                doctorId: {
-                    [Op.eq]: doctorId
-                }
-            },
-        });
+            });
 
-        console.log(existingAppointment)
+            console.log(existingAppointment);
 
-        if (existingAppointment) {
-            throw new Error("Doctor already has an appointment at this time");
-        }
+            if (existingAppointment) {
+                throw new Error("Doctor already has an appointment within 30 minutes of this time");
+            }
 
-        const newAppointment = await Appointment.create({
-            dateTime,
-            doctorId,
-            userId,
-            isConfirmed: false,
-        });
-        await patient.addAppointment(newAppointment);
-        await doctor.addAppointment(newAppointment);
+            const newAppointment = await Appointment.create({
+                dateTime,
+                doctorId,
+                userId,
+                isConfirmed: false,
+            });
+            await patient.addAppointment(newAppointment);
+            await doctor.addAppointment(newAppointment);
 
+            return newAppointment;
 
-        return newAppointment;
+        })
     } catch (e) {
-        console.error(e.status)
+        console.error(e.message); // Changed to log the error message instead of status
     }
 }
 
