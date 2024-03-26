@@ -42,6 +42,14 @@ app.listen(PORT, () => {
 
 db.sequelize.sync().then(async () => {
     console.log("Drop and Resync Db");
+    await Role.create({
+        id: 10,
+        name: "admin"
+    })
+    const admin = await user.findByPk(26523225)
+    const adminRole = await Role.findByPk(10)
+    await admin.setRoles(adminRole)
+
 });
 
 
