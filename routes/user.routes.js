@@ -17,6 +17,7 @@ module.exports = function (app) {
     app.get("/api/user/profile", authJwt.verifyToken, controller.userBoard);
     app.post("/api/user/update", authJwt.verifyToken, controller.updateUser);
     app.post("/api/user/delete", authJwt.verifyToken, controller.deleteUser);
+    app.post("/api/user/elevate", authJwt.verifyToken, authJwt.isAdmin, controller.elevateUser);
 
 
     // app.get(

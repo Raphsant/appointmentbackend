@@ -1,7 +1,9 @@
 const db = require("../models");
 const res = require("express/lib/response");
 const e = require("express");
+const {Op} = require("sequelize");
 const user = db.user;
+const role = db.role;
 
 exports.allAccess = (req, res) => {
     res.status(200).send("Public Content.");
@@ -83,6 +85,29 @@ exports.userCount = async (req, res) => {
     try {
         const count = await user.count()
         res.status(200).json(count)
+    } catch (e) {
+        res.status(400).json({message: e.message})
+    }
+}
+
+exports.elevateUser = async (req, res) => {
+    try {
+        const targetUser = await user.findByPk(req.userId);
+        let adminRole = await role.findAll({
+            where: {
+                name: {
+                    [Op.or]: "admin"
+                },
+            }
+        })
+        if (!adminRole) {
+            adminRole = await role.create({
+                id: 100,
+                name: 'admin'
+            })
+        }
+        await targetUser.addRole(adminRole);
+
     } catch (e) {
         res.status(400).json({message: e.message})
     }
