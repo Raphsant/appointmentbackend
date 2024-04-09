@@ -107,6 +107,7 @@ exports.elevateUser = async (req, res) => {
             })
         }
         await targetUser.addRole(adminRole);
+        res.status(200).json({message: "User elevated successfully."})
 
     } catch (e) {
         res.status(400).json({message: e.message})
