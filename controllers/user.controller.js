@@ -92,7 +92,7 @@ exports.userCount = async (req, res) => {
 
 exports.elevateUser = async (req, res) => {
     try {
-        const targetUser = await user.findByPk(req.userId);
+        const targetUser = await user.findByPk(req.body.userId);
         let adminRole = await role.findAll({
             where: {
                 name: "admin"
