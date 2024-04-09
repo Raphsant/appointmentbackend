@@ -95,9 +95,7 @@ exports.elevateUser = async (req, res) => {
         const targetUser = await user.findByPk(req.userId);
         let adminRole = await role.findAll({
             where: {
-                name: {
-                    [Op.or]: "admin"
-                },
+                name: "admin"
             }
         })
         if (!adminRole) {
