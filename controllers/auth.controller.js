@@ -108,3 +108,12 @@ exports.validateTokenJwt = (req, res) => {
         console.error(e);
     }
 };
+
+exports.checkPrivileges = async (req, res) => {
+    try {
+        return res.status(200).send('OK')
+
+    } catch (e) {
+        return res.status(400).send('unexpected error')
+    }
+}
