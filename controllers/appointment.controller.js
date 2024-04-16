@@ -200,7 +200,7 @@ exports.changeAptStatus = async (req, res) => {
 }
 
 exports.generateReport = async (req, res) => {
-    const {start, end} = req.body;
+    const {start, end} = req.query;
     try {
         const report = await appointmentService.getAppointmentsInRange(start, end)
         if (!report) res.status(400).json({message: "Something went wrong, try again later!"})
