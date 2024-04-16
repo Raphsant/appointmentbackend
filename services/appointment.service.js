@@ -138,7 +138,20 @@ async function getAppointmentsInRange(startDate, endDate) {
                     [Op.gte]: startDate,
                     [Op.lte]: endDate
                 }
-            }
+            },
+            include: [
+                {
+                    model: User,
+                    required: true,
+                    attributes: ['firstName', 'lastName', 'email', 'id']
+                },
+                {
+                    model: Doctor,
+                    required: true,
+                    attributes: ['firstName', 'lastName', 'specialty']
+                }
+
+            ]
         });
 
         console.log(appointments); // Optional: to log the fetched appointments for verification
