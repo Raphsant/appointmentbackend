@@ -1,18 +1,20 @@
 const appointmentService = require("../services/appointment.service");
 const {authJwt} = require("../middleware");
 const db = require("../models");
+const res = require("express/lib/response");
 const Appointment = db.appointment;
 const User = db.user
 const Doctor = db.doctor
 const accountSid = process.env.ACCOUNTSID
 const authToken = process.env.AUTHTOKEN
 const client = require('twilio')(accountSid, authToken);
+
 function formatDateAndTimeForMsg(dateTimeString) {
     const date = new Date(dateTimeString);
 
     // Options for formatting the date in Spanish
-    const dateOptions = { weekday: 'long', day: 'numeric', month: 'long' };
-    const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
+    const dateOptions = {weekday: 'long', day: 'numeric', month: 'long'};
+    const timeOptions = {hour: 'numeric', minute: 'numeric', hour12: true};
 
     // Formatters
     const dateFormatter = new Intl.DateTimeFormat('es-ES', dateOptions);
@@ -24,9 +26,10 @@ function formatDateAndTimeForMsg(dateTimeString) {
 
     return [formattedDate, formattedTime];
 }
-function sendAppointmentCreatedMessage(dateAndTime, phone){
-    try{
-        const [date,time] = formatDateAndTimeForMsg(dateAndTime)
+
+function sendAppointmentCreatedMessage(dateAndTime, phone) {
+    try {
+        const [date, time] = formatDateAndTimeForMsg(dateAndTime)
         client.messages
             .create({
                 messagingServiceSid: 'MGf95103e4cda1035962adcfc275e47d7d',
@@ -36,10 +39,10 @@ function sendAppointmentCreatedMessage(dateAndTime, phone){
                     1: date,
                     2: time,
                 }),
-                to:  `whatsapp:${phone}`
+                to: `whatsapp:${phone}`
             })
             .then(message => console.log(message?.sid));
-    }catch (e){
+    } catch (e) {
         console.error(e.message)
     }
 }
@@ -196,3 +199,13 @@ exports.changeAptStatus = async (req, res) => {
     }
 }
 
+exports.generateReport = async (req, res) => {
+    const {start, end} = req.body;
+    try {
+        const report = await appointmentService.getAppointmentsInRange(start, end)
+        if (!report) res.status(400).json({message: "Something went wrong, try again later!"})
+        res.status(200).json(report);
+    } catch (e) {
+        res.status(400).json({message: e.message})
+    }
+}

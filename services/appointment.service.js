@@ -130,6 +130,26 @@ async function changeAptStatus(status, id) {
 
 }
 
+async function getAppointmentsInRange(startDate, endDate) {
+    try {
+        const appointments = await Appointment.findAll({
+            where: {
+                dateTime: {
+                    [Op.gte]: startDate,
+                    [Op.lte]: endDate
+                }
+            }
+        });
+
+        console.log(appointments); // Optional: to log the fetched appointments for verification
+        return appointments;
+    } catch (e) {
+        console.error('Error fetching appointments:', e.message);
+        return []; // Return an empty array in case of an error
+    }
+}
+
+
 module.exports = {
     createAppointment,
     getAppointment,
@@ -138,4 +158,5 @@ module.exports = {
     getAllDoctorsAppointments,
     getAllUserAppointments,
     changeAptStatus,
+    getAppointmentsInRange
 };
