@@ -34,7 +34,7 @@ async function createAppointment(doctorId, dateTime, userId) {
                 dateTime,
                 doctorId,
                 userId,
-                isConfirmed: false,
+                status: "en espera",
             });
             await patient.addAppointment(newAppointment);
             await doctor.addAppointment(newAppointment);
@@ -125,7 +125,7 @@ async function getAllUserAppointments(userId) {
 async function changeAptStatus(status, id) {
     const targetApt = await Appointment.findByPk(id)
     await targetApt.update({
-        isConfirmed: status,
+        status: status,
     })
 
 }

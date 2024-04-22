@@ -9,8 +9,9 @@ module.exports = (sequelize, Sequelize) => {
         dateTime: {
             type: Sequelize.DATE,
         },
-        isConfirmed: {
-          type: Sequelize.BOOLEAN
+        status: {
+            type: Sequelize.ENUM,
+            values: ['confirmada', 'en espera', 'cancelada'],
         },
         // Foreign key for the user
         userId: {
