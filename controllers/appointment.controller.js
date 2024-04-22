@@ -192,7 +192,6 @@ exports.appointmentCount = async (req, res) => {
 exports.changeAptStatus = async (req, res) => {
     const {status, id} = req.body;
     try {
-        if (status !== "confirmada" || "en espera" || "cancelada") res.res.status(400).json({message: "Un error ha ocurrido"});
         const confirmation = await appointmentService.changeAptStatus(status, id);
         res.status(200).json(confirmation);
     } catch (e) {
