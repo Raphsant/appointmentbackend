@@ -84,6 +84,7 @@ exports.createAppointment = async (request, response) => {
         // Destructuring request body
         const {doctorId, userId, dateTime: dateTimeString} = request.body;
         const dateTime = new Date(dateTimeString);
+        const localDate = dateTime.toLocaleString('en-US', { timeZone: "America/Caracas" });
         const isConfirmed = false
         const targetUser = await User.findByPk(userId)
         const newAppointment = await appointmentService.createAppointment(
@@ -92,7 +93,7 @@ exports.createAppointment = async (request, response) => {
             userId,
             isConfirmed
         );
-        sendAppointmentCreatedMessage(dateTime, targetUser.phone)
+        sendAppointmentCreatedMessage(localDate, targetUser.phone)
         response.status(201).json(newAppointment);
     } catch (e) {
         handleError(e, response);
