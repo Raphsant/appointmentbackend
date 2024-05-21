@@ -1,4 +1,4 @@
- export const seguros = [
+const seguros = [
     "C.A. FABRICA NACIONAL DE CEMENTOS, (S.A.C.A)",
     "ASEGURADORA NACIONAL UNIDA UNISEGUROS S.A",
     "C N A DE SEGUROS LA PREVISORA",
@@ -101,3 +101,5 @@
     "CEMENTO CERRO AZUL, C.A.",
     "EMPRESA NACIONAL DE TRANSPORTE DE INSUMOS Y PRODUCTOS INDUSTRIALES, S.A.",
 ];
+
+export default seguros;
