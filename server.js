@@ -2,10 +2,12 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const db = require("./models");
+const {seguros} = require("./data/insurances");
 const Role = db.role;
 const Doctor = db.doctor;
 const Appointment = db.appointment;
 const user = db.user;
+const Insurance = db.insurance;
 
 const app = express();
 
@@ -43,8 +45,26 @@ app.listen(PORT, () => {
 db.sequelize.sync().then(async () => {
     console.log("Drop and Resync Db");
 
+    for(let insurance in seguros){
+        try{
+            await Insurance.create({
+                name: insurance
+            })
+
+        }catch (e){
+            console.log("Error adding: " + insurance)
+            console.error(e)
+
+        }
+    }
+
+
+
 
 });
+
+
+
 
 
 //
