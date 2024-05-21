@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const db = require("./models");
-const {seguros} = require("./data/insurances");
+const seguros = require("./data/insurances.json");
 const Role = db.role;
 const Doctor = db.doctor;
 const Appointment = db.appointment;
@@ -40,12 +40,13 @@ require("./routes/appointment.routes")(app);
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
+
 });
 
 db.sequelize.sync().then(async () => {
     console.log("Drop and Resync Db");
 
-    for(let insurance in seguros){
+    for(let insurance of seguros.companies){
         try{
             await Insurance.create({
                 name: insurance
