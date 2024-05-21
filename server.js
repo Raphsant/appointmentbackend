@@ -45,17 +45,6 @@ app.listen(PORT, () => {
 
 db.sequelize.sync().then(async () => {
     console.log("Drop and Resync Db");
-
-    for(let insurance of seguros.companies){
-        try{
-            await Insurance.create({
-                name: insurance
-            })
-        }catch (e){
-            console.log("Error adding: " + insurance)
-            console.error(e)
-        }
-    }
 });
 
 
