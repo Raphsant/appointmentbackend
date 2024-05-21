@@ -51,17 +51,11 @@ db.sequelize.sync().then(async () => {
             await Insurance.create({
                 name: insurance
             })
-
         }catch (e){
             console.log("Error adding: " + insurance)
             console.error(e)
-
         }
     }
-
-
-
-
 });
 
 
