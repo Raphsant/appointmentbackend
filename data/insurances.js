@@ -101,5 +101,3 @@ const seguros = [
     "CEMENTO CERRO AZUL, C.A.",
     "EMPRESA NACIONAL DE TRANSPORTE DE INSUMOS Y PRODUCTOS INDUSTRIALES, S.A.",
 ];
-
-export default seguros;
