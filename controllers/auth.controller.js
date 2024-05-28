@@ -76,7 +76,7 @@ exports.signin = async (req, res) => {
         }
 
         res.status(200).send({
-            id: user.id,
+            // id: user.id,
             username: user.username,
             email: user.email,
             roles: authorities,
