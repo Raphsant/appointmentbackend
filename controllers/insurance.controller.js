@@ -7,10 +7,12 @@ const Insurance = db.insurance
 
 exports.getAllInsurances = async (req, res) => {
     try {
-        const insurances = await Insurance.findAll();
+        const insurances = await Insurance.findAll({
+            attributes: ['name']
+        });
         res.status(200).json(insurances);
     } catch (e) {
-        res.status(400).send(e.message)
-        console.error()
+        res.status(400).send(e.message);
+        console.error(e);
     }
-}
+};
