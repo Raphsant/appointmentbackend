@@ -27,6 +27,21 @@ exports.userBoard = async (req, res) => {
     }
 };
 
+exports.getUser = async (req, res) => {
+    try {
+        const targetUser = await user.findByPk(req.query.userId, {
+            attributes: {exclude: ['password', 'username']}
+        })
+        if (!user) {
+            res.status(210).send("Paciente aun no registrado")
+        }
+        res.status(200).json(targetUser)
+    } catch (e) {
+        res.status(500).send({message: e.message})
+    }
+}
+
+
 //updates the user.
 exports.updateUser = async (req, res) => {
     try {
