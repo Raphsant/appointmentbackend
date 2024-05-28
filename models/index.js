@@ -41,10 +41,16 @@ db.user.belongsToMany(db.appointment, {
     otherKey: "appointmentId",
 });
 
-db.user.belongsTo(db.insurance, {
-    through: "user_insurance",
+db.user.belongsToMany(db.insurance, {
+    through: "user_insurances",
     foreignKey: "userId",
     otherKey: "insuranceId"
+})
+
+db.insurance.belongsToMany(db.user, {
+    through: "user_insurances",
+    foreignKey: "insuranceId",
+    otherKey: "userId"
 })
 
 db.doctor.belongsToMany(db.appointment, {
