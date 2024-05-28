@@ -1,7 +1,6 @@
 const db = require("../models");
 const e = require("express");
 const {Op} = require("sequelize");
-const db = require("../models");
 const res = require("express/lib/response");
 const Insurance = db.insurance
 
