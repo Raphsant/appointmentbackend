@@ -3,45 +3,18 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('user_insurances', {
-      id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        allowNull: false,
-        autoIncrement: true,
+    await queryInterface.addColumn('users', 'insuranceId', {
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'insurances', // Name of the table the foreign key references
+        key: 'id'
       },
-      userId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'users',
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
-      insuranceId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'insurances',
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
-      createdAt: {
-        type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.NOW
-      },
-      updatedAt: {
-        type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.NOW
-      }
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
     });
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('user_insurances');
+    await queryInterface.removeColumn('users', 'insuranceId');
   }
 };
