@@ -2,8 +2,8 @@ const {DataTypes} = require("sequelize");
 module.exports = (sequelize, Sequelize) => {
     const User = sequelize.define("users", {
         id: {
-          type: Sequelize.INTEGER,
-          primaryKey: true,
+            type: Sequelize.INTEGER,
+            primaryKey: true,
             allowNull: false,
         },
         username: {
@@ -11,11 +11,11 @@ module.exports = (sequelize, Sequelize) => {
             unique: true,
             allowNull: false,
         },
-        firstName:{
-          type: Sequelize.STRING,
+        firstName: {
+            type: Sequelize.STRING,
             allowNull: false,
         },
-        lastName:{
+        lastName: {
             type: Sequelize.STRING,
             allowNull: false,
         },
@@ -30,7 +30,17 @@ module.exports = (sequelize, Sequelize) => {
         phone: {
             type: Sequelize.STRING,
             allowNull: false,
+        },
+        insuranceId: {
+            type: Sequelize.INTEGER,
+            references: {
+                model: 'insurances',
+                key: 'id'
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'SET NULL'
         }
+
     });
 
     return User;
