@@ -16,6 +16,7 @@ module.exports = function (app) {
   app.get("/api/doctor", authJwt.verifyToken, controller.getAllDoctors);
   app.get("/api/getDoctor", authJwt.verifyToken, controller.getDoctor);
   app.get("/api/doctor/count", authJwt.verifyToken, controller.doctorCount)
+  app.get("/api/doctor/specialty", controller.getDoctorBySpecialty)
 };
 
 
