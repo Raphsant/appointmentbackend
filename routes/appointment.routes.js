@@ -28,6 +28,7 @@ module.exports = function (app) {
     app.get("/api/apts/count", authJwt.verifyToken, controller.appointmentCount);
     app.post("/api/apts/confirm", authJwt.verifyToken, controller.changeAptStatus)
     app.get("/api/apts/report", authJwt.verifyToken, authJwt.isModeratorOrAdmin, controller.generateReport)
+    app.post("/api/apts/entity/create", controller.entityAppointment)
 };
 
 

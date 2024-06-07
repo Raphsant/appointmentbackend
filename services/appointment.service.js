@@ -3,9 +3,59 @@ const db = require("../models");
 const Doctor = db.doctor;
 const User = db.user;
 const Appointment = db.appointment;
+const aptController = require("../controllers/auth.controller");
+const bcrypt = require("bcryptjs");
+
+async function createAppointmentEntitySystem(doctorId, dateTime, user) {
+    try {
+        const {id, firstName, lastName, email, phone} = user
+        let username = generateUserName(firstName, lastName);
+        let existingUser = await User.findOne({
+            where: {
+                username: username
+            }
+        })
+        if (existingUser) {
+            let increment = 1;
+            while (existingUser) {
+                username = generateUserName(firstName, lastName, increment);
+                existingUser = await User.findOne({
+                    where: {username: username}
+                });
+                increment++;
+            }
+        }
+
+
+        let fakeRequest = {
+            body: {
+                id: id,
+                username: username,
+                firstName: firstName,
+                lastName: lastName,
+                phone: phone,
+                email: email,
+                password: firstName.charAt(0) + lastName
+            }
+        }
+        aptController.signup(fakeRequest)
+        // return await db.sequelize.transaction(async () => {
+        //
+        // })
+    } catch (e) {
+        console.error(e.message);
+    }
+}
+
+function generateUserName(firstName, lastName, increment) {
+    if (!increment) return firstName.charAt(0) + lastName;
+    return firstName.charAt(0) + lastName + increment.toString()
+}
+
+
 async function createAppointment(doctorId, dateTime, userId) {
     try {
-        return await db.sequelize.transaction(async() => {
+        return await db.sequelize.transaction(async () => {
             const doctor = await Doctor.findByPk(doctorId);
             const patient = await User.findByPk(userId);
             if (!doctor) throw new Error("doctor not found");
@@ -164,6 +214,7 @@ async function getAppointmentsInRange(startDate, endDate) {
 
 
 module.exports = {
+    createAppointmentEntitySystem,
     createAppointment,
     getAppointment,
     updateAppointment,

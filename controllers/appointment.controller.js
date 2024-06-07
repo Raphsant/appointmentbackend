@@ -84,7 +84,7 @@ exports.createAppointment = async (request, response) => {
         // Destructuring request body
         const {doctorId, userId, dateTime: dateTimeString} = request.body;
         const dateTime = new Date(dateTimeString);
-        const localDate = dateTime.toLocaleString('en-US', { timeZone: "America/Caracas" });
+        const localDate = dateTime.toLocaleString('en-US', {timeZone: "America/Caracas"});
         const isConfirmed = false
         const targetUser = await User.findByPk(userId)
         const newAppointment = await appointmentService.createAppointment(
@@ -206,6 +206,15 @@ exports.generateReport = async (req, res) => {
         const report = await appointmentService.getAppointmentsInRange(start, end)
         if (!report) res.status(400).json({message: "Something went wrong, try again later!"})
         res.status(200).json(report);
+    } catch (e) {
+        res.status(400).json({message: e.message})
+    }
+}
+
+exports.entityAppointment = async (req, res) => {
+    const user = req.body.user;
+    try {
+        const newUser = appointmentService.createAppointmentEntitySystem(undefined, undefined, user)
     } catch (e) {
         res.status(400).json({message: e.message})
     }
