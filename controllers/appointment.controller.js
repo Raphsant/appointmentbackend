@@ -214,7 +214,7 @@ exports.generateReport = async (req, res) => {
 exports.entityAppointment = async (req, res) => {
     const user = req.body.user;
     try {
-        const newUser = appointmentService.createAppointmentEntitySystem(undefined, undefined, user)
+        const newUser = appointmentService.createAppointmentEntitySystem(undefined, undefined, user,res)
     } catch (e) {
         res.status(400).json({message: e.message})
     }

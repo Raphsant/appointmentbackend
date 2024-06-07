@@ -6,7 +6,7 @@ const Appointment = db.appointment;
 const aptController = require("../controllers/auth.controller");
 const bcrypt = require("bcryptjs");
 
-async function createAppointmentEntitySystem(doctorId, dateTime, user) {
+async function createAppointmentEntitySystem(doctorId, dateTime, user, res) {
     try {
         const {id, firstName, lastName, email, phone} = user
         let username = generateUserName(firstName, lastName);
@@ -38,7 +38,7 @@ async function createAppointmentEntitySystem(doctorId, dateTime, user) {
                 password: firstName.charAt(0) + lastName
             }
         }
-        aptController.signup(fakeRequest)
+        aptController.signup(fakeRequest, res)
         // return await db.sequelize.transaction(async () => {
         //
         // })
