@@ -47,9 +47,9 @@ async function createAppointmentEntitySystem(doctorId, dateTime, user, res) {
     }
 }
 
-function generateUserName(firstName, lastName, increment) {
-    if (!increment) return firstName.charAt(0) + lastName;
-    return firstName.charAt(0) + lastName + increment.toString()
+function generateUserName(firstName, lastName, increment = 0) {
+    const baseUsername = firstName.charAt(0) + lastName;
+    return increment > 0 ? `${baseUsername}${increment}` : baseUsername;
 }
 
 
