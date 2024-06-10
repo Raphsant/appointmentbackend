@@ -22,7 +22,7 @@ module.exports = function (app) {
         controller.deleteAppointment
     );
     app.post("/api/apts/apt", authJwt.verifyToken, controller.getAppointment);
-    app.get("/api/apts/getDoctorApts", authJwt.verifyToken, controller.getDoctorAppointments);
+    app.get("/api/apts/getDoctorApts", controller.getDoctorAppointments);
     app.get("/api/apts/getUserApts", authJwt.verifyToken, controller.getUserAppointments);
     app.get("/api/apts/getAllApts", authJwt.verifyToken, controller.getAllAppointments);
     app.get("/api/apts/count", authJwt.verifyToken, controller.appointmentCount);
