@@ -72,6 +72,8 @@ function handleError(error, response) {
  */
 async function checkPrivileges(request) {
     const {userId, body} = request;
+    console.log("DEBUG")
+    console.log(userId)
     if (userId !== body.userId && await isUserAdmin(request, ['admin, moderator']) === false) {
         throw new Error('You are making an appointment for someone else and you are not an admin.');
     }
