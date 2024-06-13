@@ -20,6 +20,7 @@ const bcrypt = require("bcryptjs");
 async function createAppointmentEntitySystem(doctorId, dateTime, user, res) {
     try {
         const {id, firstName, lastName, email, phone, isNew} = user
+        console.log(user)
         if (!isNew) {
             await createAppointment(doctorId, dateTime, id);
         } else {
