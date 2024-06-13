@@ -217,8 +217,9 @@ exports.entityAppointment = async (req, res) => {
     const user = req.body.user;
     const dateTime = req.body.dateTime
     const doctorId = req.body.doctorId
+    const isNew = req.body.isNew
     try {
-        const newUser = appointmentService.createAppointmentEntitySystem(doctorId, dateTime, user,res)
+        const newUser = appointmentService.createAppointmentEntitySystem(doctorId, dateTime, user,res, isNew)
     } catch (e) {
         res.status(400).json({message: e.message})
     }

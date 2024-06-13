@@ -17,9 +17,9 @@ const bcrypt = require("bcryptjs");
  * @returns {Promise<void>} - A promise that resolves when the appointment entity is created successfully.
  */
 
-async function createAppointmentEntitySystem(doctorId, dateTime, user, res) {
+async function createAppointmentEntitySystem(doctorId, dateTime, user, res, isNew) {
     try {
-        const {id, firstName, lastName, email, phone, isNew} = user
+        const {id, firstName, lastName, email, phone} = user
         console.log(user)
         if (!isNew) {
             await createAppointment(doctorId, dateTime, id);
