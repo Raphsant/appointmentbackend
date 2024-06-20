@@ -22,7 +22,7 @@ async function createAppointmentEntitySystem(doctorId, dateTime, user, res, isNe
         const {id, firstName, lastName, email, phone} = user
         console.log(user)
         if (!isNew) {
-            await createAppointment(doctorId, dateTime, id);
+            return await createAppointment(doctorId, dateTime, id);
         } else {
             let username = generateUserName(firstName, lastName);
             let existingUser = await User.findOne({
@@ -68,7 +68,7 @@ async function createAppointmentEntitySystem(doctorId, dateTime, user, res, isNe
             // return await db.sequelize.transaction(async () => {
             //
             // })
-            await createAppointment(doctorId, dateTime, id);
+           return  await createAppointment(doctorId, dateTime, id);
         }
 
 
