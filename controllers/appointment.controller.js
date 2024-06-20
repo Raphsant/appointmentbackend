@@ -221,7 +221,7 @@ exports.entityAppointment = async (req, res) => {
     try {
         const apt = await appointmentService.createAppointmentEntitySystem(doctorId, dateTime, user, res, isNew)
         if (!apt) res.status(400).json({message: "Something went wrong, try again later!"})
-        res.status(200).json({message: "Success!"})
+        res.status(200).json({message: "Success!", apt: apt})
     } catch (e) {
         res.status(400).json({message: e.message})
     }
