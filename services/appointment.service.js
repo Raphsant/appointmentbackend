@@ -115,9 +115,10 @@ async function createAppointment(doctorId, dateTime, userId, insurance) {
                 dateTime,
                 doctorId,
                 userId,
-                status: "en espera",
-                insurance: insurance
+                insurance,
+                status: "en espera"
             });
+            console.log(newAppointment)
             await patient.addAppointment(newAppointment);
             await doctor.addAppointment(newAppointment);
 
