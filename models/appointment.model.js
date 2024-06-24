@@ -13,6 +13,10 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.ENUM,
             values: ['confirmada', 'en espera', 'cancelada'],
         },
+        insurance: {
+            type: Sequelize.STRING,
+            allowNull: true,
+        },
         // Foreign key for the user
         userId: {
             type: Sequelize.INTEGER,
