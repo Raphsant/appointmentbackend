@@ -112,10 +112,10 @@ async function createAppointment(doctorId, dateTime, userId, insurance) {
             console.log(insurance)
 
             const newAppointment = await Appointment.create({
-                dateTime,
-                doctorId,
-                userId,
-                insurance,
+                dateTime: dateTime,
+                doctorId: doctorId,
+                userId: userId,
+                insurance: insurance,
                 status: "en espera"
             });
             console.log(newAppointment)
