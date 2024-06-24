@@ -17,7 +17,7 @@ const bcrypt = require("bcryptjs");
  * @returns {Promise<void>} - A promise that resolves when the appointment entity is created successfully.
  */
 
-async function createAppointmentEntitySystem(doctorId, dateTime, user, res, isNew) {
+async function createAppointmentEntitySystem(doctorId, dateTime, user, res, isNew, insurance) {
     try {
         const {id, firstName, lastName, email, phone} = user
         console.log(user)
@@ -68,7 +68,7 @@ async function createAppointmentEntitySystem(doctorId, dateTime, user, res, isNe
             // return await db.sequelize.transaction(async () => {
             //
             // })
-           return  await createAppointment(doctorId, dateTime, id);
+           return  await createAppointment(doctorId, dateTime, id, insurance);
         }
 
 
@@ -83,7 +83,7 @@ function generateUserName(firstName, lastName, increment = 0) {
 }
 
 
-async function createAppointment(doctorId, dateTime, userId) {
+async function createAppointment(doctorId, dateTime, userId, insurance) {
     try {
         return await db.sequelize.transaction(async () => {
             const doctor = await Doctor.findByPk(doctorId);
@@ -115,6 +115,7 @@ async function createAppointment(doctorId, dateTime, userId) {
                 doctorId,
                 userId,
                 status: "en espera",
+                insurance: insurance
             });
             await patient.addAppointment(newAppointment);
             await doctor.addAppointment(newAppointment);

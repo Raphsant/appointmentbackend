@@ -214,12 +214,9 @@ exports.generateReport = async (req, res) => {
 }
 
 exports.entityAppointment = async (req, res) => {
-    const user = req.body.user;
-    const dateTime = req.body.dateTime
-    const doctorId = req.body.doctorId
-    const isNew = req.body.isNew
+    const {user, dateTime, doctorId, isNew, insurance} = req.body;
     try {
-        const apt = await appointmentService.createAppointmentEntitySystem(doctorId, dateTime, user, res, isNew)
+        const apt = await appointmentService.createAppointmentEntitySystem(doctorId, dateTime, user, res, isNew, insurance)
         if (!apt) res.status(400).json({message: "Something went wrong, try again later!"})
         res.status(200).json({message: "Success!", apt: apt})
     } catch (e) {
