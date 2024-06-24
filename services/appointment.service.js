@@ -68,7 +68,7 @@ async function createAppointmentEntitySystem(doctorId, dateTime, user, res, isNe
             // return await db.sequelize.transaction(async () => {
             //
             // })
-           return  await createAppointment(doctorId, dateTime, id, insurance);
+            return await createAppointment(doctorId, dateTime, id, insurance);
         }
 
 
@@ -109,6 +109,8 @@ async function createAppointment(doctorId, dateTime, userId, insurance) {
             if (existingAppointment) {
                 throw new Error("Doctor already has an appointment within 30 minutes of this time");
             }
+            console.log("the insurance is:")
+            console.log(insurance)
 
             const newAppointment = await Appointment.create({
                 dateTime,
