@@ -116,7 +116,7 @@ async function createAppointment(doctorId, dateTime, userId, insurance) {
                 doctorId,
                 userId,
                 status: "en espera",
-                insurance
+                insurance: insurance
             });
             await patient.addAppointment(newAppointment);
             await doctor.addAppointment(newAppointment);
