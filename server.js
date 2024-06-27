@@ -12,7 +12,7 @@ const Insurance = db.insurance;
 const app = express();
 
 let corsOptions = {
-    origin: ["http://localhost:3000", "http://10.0.0.121:3000", "https://vistacentro-citas.com", "https://seguros.vistacentro-citas.com/"]
+    origin:  '*' //["http://localhost:3000", "http://10.0.0.121:3000", "https://vistacentro-citas.com", "https://seguros.vistacentro-citas.com/"]
 };
 
 app.use(cors(corsOptions));
