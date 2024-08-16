@@ -166,7 +166,7 @@ exports.getAllAppointments = async (req, res) => {
                 {
                     model: User,
                     required: true,
-                    attributes: ['firstName', 'lastName', 'email', 'id']
+                    attributes: ['firstName', 'lastName', 'email', 'id', 'phone']
                 },
                 {
                     model: Doctor,
